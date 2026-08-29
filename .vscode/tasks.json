@@ -2,64 +2,30 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "clean: remove stale executables",
+      "label": "Build and Run Active C++",
       "type": "shell",
-      "command": "powershell",
-      "args": [
-        "-NoProfile",
-        "-Command",
-        "if (Test-Path \"${workspaceFolder}\\recursion.exe\") { Remove-Item -Force \"${workspaceFolder}\\recursion.exe\" }; if (Test-Path \"${fileDirname}\\${fileBasenameNoExtension}.exe\") { Remove-Item -Force \"${fileDirname}\\${fileBasenameNoExtension}.exe\" }"
-      ],
-      "problemMatcher": []
-    },
-    {
-      "label": "compile: active C++ file",
-      "type": "shell",
-      "command": "g++",
-      "args": [
-        "${file}",
-        "-std=c++17",
-        "-O2",
-        "-g",
-        "-o",
-        "${fileDirname}\\${fileBasenameNoExtension}.exe"
-      ],
+      "command": "call \"${workspaceFolder}\\.vscode\\build_run.bat\"",
       "options": {
+        "shell": {
+          "executable": "cmd.exe",
+          "args": ["/C"]
+        },
+        "env": {
+          "CPP_FILE": "${file}",
+          "CPP_WORKSPACE": "${workspaceFolder}"
+        },
         "cwd": "${workspaceFolder}"
       },
-      "problemMatcher": ["$gcc"],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "run: active C++ (redirect io)",
-      "type": "shell",
-      "command": "cmd",
-      "args": [
-        "/c",
-        "\"${fileDirname}\\${fileBasenameNoExtension}.exe\" < \"${workspaceFolder}\\input.txt\" > \"${workspaceFolder}\\output.txt\""
-      ],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "Build and Run Active C++",
-      "dependsOn": [
-        "clean: remove stale recursion.exe",
-        "compile: active C++ file",
-        "run: active C++ (redirect io)"
-      ],
-      "dependsOrder": "sequence",
       "group": {
         "kind": "build",
         "isDefault": true
       },
-      "problemMatcher": []
+      "problemMatcher": ["$gcc"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      }
     }
   ]
 }
